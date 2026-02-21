@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Sifra Energy - EMS Demo</title>
+  <link rel="stylesheet" href="assets/css/style.css" />
+</head>
+<body>
+  <div class="app">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-mark">SS</div>
+        <div class="brand-name">SifraEnergy</div>
+      </div>
+
+      <nav class="project-nav" id="projectNav">
+        <button class="project-item active" data-project="BESS_Project_1">▶ BESS_Project_1</button>
+        <button class="project-item" data-project="BESS_Project_2">▶ BESS_Project_2</button>
+        <button class="project-item" data-project="BESS_Project_3">▶ BESS_Project_3</button>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="hint">
+          Demo is static.<br/>
+          Data comes from <code>/data/*.json</code>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main -->
+    <main class="main">
+      <!-- Header -->
+      <header class="topbar">
+        <div class="topbar-left">
+          <div class="project-title" id="projectTitle">BESS_Project_1</div>
+        </div>
+
+        <div class="topbar-right">
+          <div class="clock">
+            <span class="clock-label">Clock:</span>
+            <span class="value-box" id="clockBox">----</span>
+          </div>
+        </div>
+      </header>
+
+      <!-- Tabs -->
+      <div class="tabs" id="tabs">
+        <button class="tab active" data-view="overall">Overall Monitoring</button>
+        <button class="tab" data-view="realtime">Real-time Monitoring</button>
+        <button class="tab" data-view="pack">Pack Monitoring</button>
+      </div>
+
+      <!-- Views -->
+      <section class="view active" id="view-overall">
+        <h2>Overall Monitoring</h2>
+
+        <div class="overall-top">
+          <div class="kv">
+            <div class="kv-row">
+              <div class="kv-label">Current Energy</div>
+              <div class="value-box" data-tag="overall.current_energy_wh">--</div>
+              <div class="kv-unit">(Wh)</div>
+
+              <div class="kv-label right">SOC</div>
+              <div class="value-box" data-tag="overall.soc_percent">--</div>
+              <div class="kv-unit">(%)</div>
+            </div>
+
+            <div class="kv-row">
+              <div class="kv-label">Current State</div>
+              <div class="value-box wide" data-tag="overall.current_state">--</div>
+            </div>
+
+            <div class="kv-row">
+              <div class="kv-label">Current Strategy</div>
+              <div class="select-wrap">
+                <div class="value-box wide" data-tag="overall.current_strategy">--</div>
+                <select id="strategySelect" class="select">
+                  <option value="Pattern 1">Pattern 1</option>
+                  <option value="Pattern 2">Pattern 2</option>
+                  <option value="Pattern 3">Pattern 3</option>
+                </select>
+              </div>
+              <div class="hint-inline">*(demo UI only, no control logic)</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="chart-header">
+          <div class="chart-tabs" id="chartTabs">
+            <button class="chip active" data-series="series.total_energy">Total Energy</button>
+            <button class="chip" data-series="series.chg_solar_energy">Chg_Solar_Energy</button>
+            <button class="chip" data-series="series.chg_grid_energy">Chg_Grid_Energy</button>
+            <button class="chip" data-series="series.discharged_energy">Discharged Energy</button>
+            <button class="chip" data-series="series.temperature_avg">Temperature_Avg</button>
+          </div>
+
+          <div class="chart-actions">
+            <label class="file-btn">
+              Load JSON/CSV
+              <input type="file" id="fileInput" accept=".json,.csv" />
+            </label>
+          </div>
+        </div>
+
+        <div class="chart-wrap">
+          <canvas id="overallChart" width="1100" height="320"></canvas>
+        </div>
+
+        <div class="legend">
+          <div class="legend-item">
+            <span class="dot"></span>
+            <span id="chartLegend">series.total_energy</span>
+          </div>
+          <div class="legend-note">
+            X = 15 min buckets (demo). Y = value.
+          </div>
+        </div>
+      </section>
+
+      <section class="view" id="view-realtime">
+        <h2>Real-time Monitoring</h2>
+
+        <div class="realtime-grid">
+          <!-- Solar -->
+          <div class="panel">
+            <div class="panel-head">
+              <div class="icon">
+                <!-- simple inline SVG -->
+                <svg viewBox="0 0 64 64" width="44" height="44" aria-hidden="true">
+                  <rect x="6" y="30" width="22" height="18" stroke="currentColor" fill="none"/>
+                  <rect x="30" y="26" width="28" height="22" stroke="currentColor" fill="none"/>
+                  <line x1="6" y1="39" x2="28" y2="39" stroke="currentColor"/>
+                  <line x1="30" y1="37" x2="58" y2="37" stroke="currentColor"/>
+                  <circle cx="50" cy="14" r="6" stroke="currentColor" fill="none"/>
+                </svg>
+              </div>
+              <div class="panel-title">Solar</div>
+            </div>
+            <div class="io">
+              <div class="io-row"><div class="io-label">Solar Input V</div><div class="value-box" data-tag="solar.v">--</div><div class="io-unit">(V)</div></div>
+              <div class="io-row"><div class="io-label">Solar Input I</div><div class="value-box" data-tag="solar.i">--</div><div class="io-unit">(A)</div></div>
+              <div class="io-row"><div class="io-label">Solar Input P</div><div class="value-box" data-tag="solar.p">--</div><div class="io-unit">(W)</div></div>
+              <div class="io-row"><div class="io-label">Solar Input E</div><div class="value-box" data-tag="solar.e">--</div><div class="io-unit">(Wh)</div></div>
+            </div>
+          </div>
+
+          <!-- Grid -->
+          <div class="panel">
+            <div class="panel-head">
+              <div class="icon">
+                <svg viewBox="0 0 64 64" width="44" height="44" aria-hidden="true">
+                  <polygon points="32,6 18,30 26,30 14,58 34,34 26,34" stroke="currentColor" fill="none"/>
+                  <line x1="40" y1="18" x2="58" y2="18" stroke="currentColor"/>
+                  <line x1="40" y1="26" x2="58" y2="26" stroke="currentColor"/>
+                </svg>
+              </div>
+              <div class="panel-title">Grid (Import only)</div>
+            </div>
+            <div class="io">
+              <div class="io-row"><div class="io-label">Grid Input V</div><div class="value-box" data-tag="grid.v">--</div><div class="io-unit">(V)</div></div>
+              <div class="io-row"><div class="io-label">Grid Input I</div><div class="value-box" data-tag="grid.i">--</div><div class="io-unit">(A)</div></div>
+              <div class="io-row"><div class="io-label">Grid Input P</div><div class="value-box" data-tag="grid.p">--</div><div class="io-unit">(W)</div></div>
+              <div class="io-row"><div class="io-label">Grid Input E</div><div class="value-box" data-tag="grid.e">--</div><div class="io-unit">(Wh)</div></div>
+            </div>
+          </div>
+
+          <!-- Load -->
+          <div class="panel">
+            <div class="panel-head">
+              <div class="icon">
+                <svg viewBox="0 0 64 64" width="44" height="44" aria-hidden="true">
+                  <rect x="22" y="6" width="20" height="40" rx="2" stroke="currentColor" fill="none"/>
+                  <circle cx="32" cy="18" r="6" stroke="currentColor" fill="none"/>
+                  <line x1="28" y1="52" x2="28" y2="58" stroke="currentColor"/>
+                  <line x1="36" y1="52" x2="36" y2="58" stroke="currentColor"/>
+                </svg>
+              </div>
+              <div class="panel-title">Load</div>
+            </div>
+            <div class="io">
+              <div class="io-row"><div class="io-label">Load V</div><div class="value-box" data-tag="load.v">--</div><div class="io-unit">(V)</div></div>
+              <div class="io-row"><div class="io-label">Load I</div><div class="value-box" data-tag="load.i">--</div><div class="io-unit">(A)</div></div>
+              <div class="io-row"><div class="io-label">Load P</div><div class="value-box" data-tag="load.p">--</div><div class="io-unit">(W)</div></div>
+              <div class="io-row"><div class="io-label">Load E</div><div class="value-box" data-tag="load.e">--</div><div class="io-unit">(Wh)</div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="note">
+          This is a static demo. Values update only when you switch project or load a file.
+        </div>
+      </section>
+
+      <section class="view" id="view-pack">
+        <h2>Pack Monitoring</h2>
+        <div id="packGrid" class="pack-grid"></div>
+      </section>
+    </main>
+  </div>
+
+  <script src="assets/js/router.js"></script>
+  <script src="assets/js/data-provider.js"></script>
+  <script src="assets/js/ui-binder.js"></script>
+  <script src="assets/js/chart.js"></script>
+  <script src="assets/js/app.js"></script>
+</body>
+</html>

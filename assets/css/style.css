@@ -178,6 +178,16 @@ h2{
 }
 
 /* Overall */
+
+.logo{
+    max-width: 150px;      /* 控制宽度（核心参数） */
+    width: 80%;
+    height: auto;
+    object-fit: contain;
+    display: block;
+    margin: 6px auto 2px auto;
+}
+
 .overall-top{
   padding: 6px 2px 14px 2px;
 }
@@ -397,3 +407,4 @@ h2{
   .pack-grid{ grid-template-columns: 1fr; }
   .sidebar{ display:none; }
 }
+
